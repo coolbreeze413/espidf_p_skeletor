@@ -59,6 +59,51 @@ static int func_callback(const char *text, void *extobj)
 ////////////////////////////// NTSHELL
 
 
+///////////////////////////// DISPLAY
+// Include the correct display library
+// For a connection via I2C using Wire include
+#include <Wire.h>  // Only needed for Arduino 1.6.5 and earlier
+#include "SSD1306.h" // alias for `#include "SSD1306Wire.h"`
+// or #include "SH1106.h" alis for `#include "SH1106Wire.h"`
+// For a connection via I2C using brzo_i2c (must be installed) include
+// #include <brzo_i2c.h> // Only needed for Arduino 1.6.5 and earlier
+// #include "SSD1306Brzo.h"
+// #include "SH1106Brzo.h"
+// For a connection via SPI include
+// #include <SPI.h> // Only needed for Arduino 1.6.5 and earlier
+// #include "SSD1306Spi.h"
+// #include "SH1106SPi.h"
+
+// Include custom images
+#include "images.h"
+
+// Initialize the OLED display using SPI
+// D5 -> CLK
+// D7 -> MOSI (DOUT)
+// D0 -> RES
+// D2 -> DC
+// D8 -> CS
+// SSD1306Spi        display(D0, D2, D8);
+// or
+// SH1106Spi         display(D0, D2);
+
+// Initialize the OLED display using brzo_i2c
+// D3 -> SDA
+// D5 -> SCL
+// SSD1306Brzo display(0x3c, D3, D5);
+// or
+// SH1106Brzo  display(0x3c, D3, D5);
+
+// Initialize the OLED display using Wire library
+SSD1306  display(0x3c, 5, 4);
+// SH1106 display(0x3c, D3, D5);
+
+///////////////////////////// DISPLAY
+
+
+
+
+
 
 ////////////// CONFIGS
 
@@ -96,6 +141,11 @@ void hello_task(void *pvParameter)
     while(1)
     {
         printf("hello_task: %d\n", i);
+
+        display.clear();
+        display.drawString(64,22, String("loop: ") + String(i));
+        display.display();
+
         vTaskDelay(1000 / portTICK_RATE_MS);
         i++;
     }
@@ -148,6 +198,28 @@ void setup(){
 	//////////////////////////////////////////// NTSHELL
 
 
+	//////////////////////////////////////////// DISPLAY
+	// Initialising the UI will init the display too.
+	display.init();
+
+	//display.flipScreenVertically();
+	display.setFont(ArialMT_Plain_10);
+
+	// clear the display
+	display.clear();
+
+
+	//display.drawXbm(34, 14, WiFi_Logo_width, WiFi_Logo_height, WiFi_Logo_bits);
+
+	display.flipScreenVertically();
+	display.setTextAlignment(TEXT_ALIGN_CENTER);
+	display.drawString(64,22, "KaNTHRi PoDaPaTi");
+
+	// write the buffer to the display
+	display.display();
+
+	vTaskDelay(3000 / portTICK_RATE_MS);
+	//////////////////////////////////////////// DISPLAY
 
 	xTaskCreatePinnedToCore(hello_task, "hello_task", 2048, NULL, 1, NULL, 0); // dummy task on Core 0.
 
@@ -161,6 +233,9 @@ void loop(){
 		ntshell_execute_arduino(&ntshell);
 	}
 	//////////////////////////////////////////// NTSHELL
+
+
+
 }
 
 

@@ -4,3 +4,6 @@
 [submodule "components/arduino-esp32"]
 	path = components/arduino-esp32
 	url = https://github.com/espressif/arduino-esp32
+[submodule "components\\ssd1306"]
+	path = components\\ssd1306
+	url = https://github.com/coolbreeze413/espidf_c_ssd1306

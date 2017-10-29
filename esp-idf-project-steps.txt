@@ -1,0 +1,31 @@
+1. Get ESP IDF git repo
+
+2. Get Latest ESP32 XTENSA toolchain and MSYS environment
+
+setup profile to setup the IDF_PATH automatically on launch: 
+https://esp-idf.readthedocs.io/en/latest/get-started/add-idf_path-to-profile.html#add-idf-path-to-profile-windows
+use mingw32.exe to launch the msys shell and not any other exe.
+
+
+
+3. Get project: git clone --recursive https://github.com/coolbreeze413/espidf_p_skeletor.git
+NOTE: 
+- contains the arduino-esp32 core component as submodule [https://github.com/espressif/arduino-esp32/tree/07685903321a1968174f1a5027be88adb77b8817]
+- contains the ntshell component as a submodule [https://github.com/coolbreeze413/espidf_c_ntshell/tree/87f231584436ae234c226cfcb60f6f4e96a87dee]
+
+
+
+4. Build and Flash
+
+Launch the MSYS2 using the mingw32.exe 
+
+make menuconfig
+- if nothing else, then make sure you select the correct serial port in the config.
+- make sure that arduino options (autostart setup and loop etc. are disabled)
+
+
+try to build and flash now from msys:
+make
+make flash
+
+

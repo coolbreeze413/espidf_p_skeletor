@@ -1,0 +1,38 @@
+File > Import > C/C++ > Existing Code as Makefile Project
+
+Project Properties :
+
+C++ Build:
+- uncheck use default build command
+- build command: python ${IDF_PATH}/tools/windows/eclipse_make.py
+
+C++ Build > Environment Variables:
+
+(add) BATCH_BUILD:
+1
+
+(add) IDF_PATH: {specific to setup}
+X:/esp32/espidf_git
+
+(modify) PATH: {specific to setup}
+X:\esp32\esp32_win32_msys2_environment_and_toolchain-20170918\msys32\usr\bin;X:\esp32\esp32_win32_msys2_environment_and_toolchain-20170918\msys32\mingw32\bin;X:\esp32\esp32_win32_msys2_environment_and_toolchain-20170918\msys32\opt\xtensa-esp32-elf\bin
+
+
+C++ General > Preprocessor Include Paths > Providers:
+
+CDT GCC Built-in Compiler Settings Cygwin:
+“Command to get compiler specs”: xtensa-esp32-elf-gcc ${FLAGS} -E -P -v -dD "${INPUTS}"
+
+CDT GCC Build Output Parser:
+"Compiler command pattern": xtensa-esp32-elf-((g?cc)|([gc]\+\+)|(clang))
+
+
+(remember) if new board, do menuconfig, choose the correct serial port.
+right click > clean, build should work
+add build target: right click > Build Targets > Create, Target Name : flash
+run Build Target > flash
+
+
+Sources:
+https://esp-idf.readthedocs.io/en/latest/get-started/eclipse-setup-windows.html#eclipse-windows-setup
+https://esp-idf.readthedocs.io/en/latest/get-started/eclipse-setup.html#eclipse-build-project

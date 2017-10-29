@@ -1,0 +1,8 @@
+# eclipse stuff ignored
+.settings/
+.cproject
+.project
+
+# esp32 build stuff ignored
+build/
+sdkconfig.old

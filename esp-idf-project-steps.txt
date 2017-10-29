@@ -1,6 +1,19 @@
-1. Get ESP IDF git repo
+Recommended:
+Create a directory for esp32
+Clone esp-idf into esp-idf
+Download and extract msys2 into msys2
+Clone skeletor example project into projects/skeletor
+Any other projects can also go into projects/
 
-2. Get Latest ESP32 XTENSA toolchain and MSYS environment
+
+1. Get ESP IDF git repo
+git clone --recursive https://github.com/espressif/esp-idf.git
+
+
+
+2. Get and Configure Latest ESP32 XTENSA toolchain and MSYS2 environment:
+http://esp-idf.readthedocs.io/en/latest/get-started/windows-setup.html
+[last update, used: https://dl.espressif.com/dl/esp32_win32_msys2_environment_and_toolchain-20170918.zip]
 
 setup profile to setup the IDF_PATH automatically on launch: 
 https://esp-idf.readthedocs.io/en/latest/get-started/add-idf_path-to-profile.html#add-idf-path-to-profile-windows
@@ -12,20 +25,23 @@ use mingw32.exe to launch the msys shell and not any other exe.
 NOTE: 
 - contains the arduino-esp32 core component as submodule [https://github.com/espressif/arduino-esp32/tree/07685903321a1968174f1a5027be88adb77b8817]
 - contains the ntshell component as a submodule [https://github.com/coolbreeze413/espidf_c_ntshell/tree/87f231584436ae234c226cfcb60f6f4e96a87dee]
+- contains the ssd1306 component as a submodule [https://github.com/coolbreeze413/espidf_c_ssd1306/tree/cd534f89cf1facbbec499845510737e5fe8f0b18]
 
 
 
 4. Build and Flash
 
-Launch the MSYS2 using the mingw32.exe 
+IMPORTANT: Launch the MSYS2 using the mingw32.exe 
 
 make menuconfig
 - if nothing else, then make sure you select the correct serial port in the config.
-- make sure that arduino options (autostart setup and loop etc. are disabled)
+- make sure that arduino options (autostart setup and loop etc. are DISABLED)
 
 
-try to build and flash now from msys:
+try to build and flash now from msys2:
 make
 make flash
 
+
+Also see the eclipse_idf_PATH.txt for eclipse steps.
 

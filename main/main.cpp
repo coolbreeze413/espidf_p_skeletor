@@ -13,117 +13,18 @@
 #include "nvs_flash.h"
 #include "Arduino.h"
 
-#define SKELETOR_FEATURE_SHELL
-#define SKELETOR_FEATURE_SSD1306
+
+#define SKELETOR_DEBUG
+#define SKELETOR_FEATURE_SHELLARDUINO
+#define SKELETOR_FEATURE_SSD1306ARDUINO
+#define SKELETOR_FEATURE_WIFIARDUINO
+#define SKELETOR_FEATURE_MQTTARDUINO
 
 
 #define APP_TASKS_RUNNING_CORE 		1
 
 
-// synchronization via task notification
-TaskHandle_t xTaskToNotify = NULL;
-
-
-
-#ifdef SKELETOR_FEATURE_SHELL
-//////////////////////////////		NTSHELL		//////////////////////////////
-#include "ntshell.h"
-#include "ntlibc.h"
-
-#include <usrcmd_arduino.h>
-extern "C" {
-#include <ntshell_arduino.h>
-
-}
-
-#define PROMPTSTR "skeletor>"
-
-static ntshell_t ntshell;
-
-
-static int func_read(char *buf, int cnt, void *extobj)
-{
-	if (Serial.available())
-	{
-		return Serial.readBytes(buf, cnt);
-	}
-	else
-	{
-		return 0;
-	}
-}
-
-static int func_write(const char *buf, int cnt, void *extobj)
-{
-	return Serial.write((const uint8_t*)buf, cnt);
-}
-
-static int func_callback(const char *text, void *extobj)
-{
-#if 0 // local testing.
-	ntshell_t *ntshell = (ntshell_t *)extobj;
-	//UNUSED_VARIABLE(ntshell);
-	//UNUSED_VARIABLE(extobj);
-	if (ntlibc_strlen(text) > 0) {
-		Serial.print("User input text:");
-		Serial.print(text);
-		Serial.print("\r\n");
-	}
-	return 0;
-#else
-	return usrcmd_execute(text);
-#endif
-}
-//////////////////////////////		NTSHELL		//////////////////////////////
-#endif // #ifdef SKELETOR_FEATURE_SHELL
-
-
-
-#ifdef SKELETOR_FEATURE_SSD1306
-//////////////////////////////		SSD1306 DISPLAY		//////////////////////////////
-// Include the correct display library
-// For a connection via I2C using Wire include
-#include <Wire.h>  // Only needed for Arduino 1.6.5 and earlier
-#include "SSD1306.h" // alias for `#include "SSD1306Wire.h"`
-// or #include "SH1106.h" alis for `#include "SH1106Wire.h"`
-// For a connection via I2C using brzo_i2c (must be installed) include
-// #include <brzo_i2c.h> // Only needed for Arduino 1.6.5 and earlier
-// #include "SSD1306Brzo.h"
-// #include "SH1106Brzo.h"
-// For a connection via SPI include
-// #include <SPI.h> // Only needed for Arduino 1.6.5 and earlier
-// #include "SSD1306Spi.h"
-// #include "SH1106SPi.h"
-
-// Include custom images
-//#include "images.h"
-
-// Initialize the OLED display using SPI
-// D5 -> CLK
-// D7 -> MOSI (DOUT)
-// D0 -> RES
-// D2 -> DC
-// D8 -> CS
-// SSD1306Spi        display(D0, D2, D8);
-// or
-// SH1106Spi         display(D0, D2);
-
-// Initialize the OLED display using brzo_i2c
-// D3 -> SDA
-// D5 -> SCL
-// SSD1306Brzo display(0x3c, D3, D5);
-// or
-// SH1106Brzo  display(0x3c, D3, D5);
-
-// Initialize the OLED display using Wire library
-SSD1306  display(0x3c, 5, 4);
-// SH1106 display(0x3c, D3, D5);
-//////////////////////////////		SSD1306 DISPLAY		//////////////////////////////
-#endif // #ifdef SKELETOR_FEATURE_SSD1306
-
-
-////////////// CONFIGS
-
+//////////////////////////////		PROJECT DEBUG		//////////////////////////////
 void debugPrint(String message)
 {
 	//	if(!debug_enabled) return; // debug is disabled.
@@ -133,31 +34,110 @@ void debugPrint(String message)
 
 	// log over serial anyway
 	Serial.print(message);
-
 }
 
 
-#define SKELETOR_DEBUG
 #ifdef SKELETOR_DEBUG
 #define SKELETOR_DEBUG_PRINT(...) { debugPrint(__VA_ARGS__); }
 #else
 #define SKELETOR_DEBUG_PRINT(...) {}
 #endif
-/////////////
+//////////////////////////////		PROJECT DEBUG		//////////////////////////////
+
+
+
+#ifdef SKELETOR_FEATURE_SHELLARDUINO
+//////////////////////////////		NTSHELL ARDUINO		//////////////////////////////
+#include "ntshell_arduino.h"
+//////////////////////////////		NTSHELL ARDUINO		//////////////////////////////
+#endif // #ifdef SKELETOR_FEATURE_SHELLARDUINO
+
+
+
+#ifdef SKELETOR_FEATURE_WIFIARDUINO
+//////////////////////////////		WIFI ARDUINO		//////////////////////////////
+#include "wifi_management_arduino.h"
+//////////////////////////////		WIFI ARDUINO		//////////////////////////////
+#endif // #ifdef SKELETOR_FEATURE_WIFIARDUINO
+
+
+
+#ifdef SKELETOR_FEATURE_MQTTARDUINO
+//////////////////////////////		MQTT ARDUINO		//////////////////////////////
+#include "mqtt_arduino.h"
+//////////////////////////////		MQTT ARDUINO		//////////////////////////////
+#endif // #ifdef SKELETOR_FEATURE_MQTTARDUINO
+
+
+
+#ifdef SKELETOR_FEATURE_SSD1306ARDUINO
+//////////////////////////////		SSD1306 ARDUINO		//////////////////////////////
+#include "ssd1306_arduino.h"
+//////////////////////////////		SSD1306 ARDUINO		//////////////////////////////
+#endif // #ifdef SKELETOR_FEATURE_SSD1306ARDUINO
 
 
 
 
 
-void hello_task(void *pvParameter)
+
+TaskHandle_t xTaskHandle_worker_b = NULL;
+
+#include "external_ip_detect_arduino.h"
+#include "ssd1306_arduino.h"
+// worker task b -> gets the current external ip address and displays it on the ssd1306 display.
+void worker_task_b(void *pvParameter)
 {
-	// dummy task for load.
 	uint32_t ulNotifiedValue;
+	String externalIPAddress;
 
-	uint8_t i = 0;
-	//printf("hello_task started!\n\n");
+	xTaskHandle_worker_b = xTaskGetCurrentTaskHandle();	/* set our handle here */
 
-	xTaskToNotify = xTaskGetCurrentTaskHandle();	/* set our handle here */
+	while(1)
+	{
+		//printf("worker_task_b: %d\n", i);
+
+		/* wait to be notified when to proceed further */
+		xTaskNotifyWait(
+				0x00,      			/* Don't clear any notification bits on entry. */
+				ULONG_MAX, 			/* Reset the notification value to 0 on exit. */
+				&ulNotifiedValue, 	/* Notified value pass out in ulNotifiedValue. */
+				portMAX_DELAY		/* Block indefinitely. */
+				);
+
+		if( ( ulNotifiedValue & 0x01 ) != 0 )
+		{
+			// invoked the external ip address detect
+			externalIPAddress = detectExternalIP();
+
+			// display the external ip address on the oled
+			displayExternalIPAddress(externalIPAddress);
+		}
+		else if( ( ulNotifiedValue & 0x02 ) != 0 )
+		{
+			//displayCount();
+		}
+		else
+		{
+			// continue forward anyway. can be handled differently. will expand later.
+		}
+	}
+}
+
+
+TaskHandle_t xTaskHandle_worker_a = NULL;
+
+// worker task a -> waits until it is notified that system is ready.
+// this then runs a loop with sleep time delay (30 sec) and wakes up another task
+// worker task b to do its job in every loop
+void worker_task_a(void *pvParameter)
+{
+	uint32_t ulNotifiedValue;
+	uint32_t ulDelayInSeconds = 30;
+
+	uint32_t i = 0;
+
+	xTaskHandle_worker_a = xTaskGetCurrentTaskHandle();	/* set our handle here */
 
 	/* wait to be notified when to proceed further */
 	xTaskNotifyWait(
@@ -179,23 +159,27 @@ void hello_task(void *pvParameter)
 
 	while(1)
 	{
-		//printf("hello_task: %d\n", i);
+		//printf("worker_task_a: %d\n", i);
 
-		// TODO remove hardcoded coords and make a generic UI.
-		display.setColor(BLACK);
-		display.fillRect(60, 42, 128, 20); // clear the area.
-		display.setColor(WHITE);
-		display.drawString(80,42, String(i));
-		display.display();
+		// send task notification to worker tasks, setup is done.
+		/* Set bit 1 in the notification value of the task referenced by xTask1Handle. */
+		if(xTaskNotify( xTaskHandle_worker_b, ( 1UL ), eSetBits ) == pdPASS)
+		{
+			/* The task's notification value was updated. */
+			//printf("\n\nworker task a notified ok.\n");
+			//displayCount(i);
+		}
+		else
+		{
+			/* The task's notification value was not updated. */
+			printf("\n\nworker task b notification failed.\n");
+		}
 
-		vTaskDelay(1000 / portTICK_RATE_MS);
-		i++;
+
+		vTaskDelay((ulDelayInSeconds * 1000) / portTICK_RATE_MS); // 30 seconds
+		i+=ulDelayInSeconds;
 	}
 }
-
-
-
-
 
 
 
@@ -205,8 +189,8 @@ void setup()
 	Serial.begin(115200);
 
 
-	/////////////////////////////////////////////////////
 #ifdef SKELETOR_DEBUG
+	//////////////////////////////		DEBUG		//////////////////////////////
 	SKELETOR_DEBUG_PRINT("\n\n");
 	delay(500);
 	SKELETOR_DEBUG_PRINT("███████╗██╗  ██╗███████╗██╗     ███████╗████████╗ ██████╗ ██████╗  \n");
@@ -222,99 +206,100 @@ void setup()
 	SKELETOR_DEBUG_PRINT("╚══════╝╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝ \n");
 	delay(500);
 	SKELETOR_DEBUG_PRINT("\n\n");
+	//////////////////////////////		DEBUG		//////////////////////////////
 #endif // #ifdef SKELETOR_DEBUG
-	/////////////////////////////////////////////////////
 
 
-#ifdef SKELETOR_FEATURE_SHELL
-	//////////////////////////////		NTSHELL		//////////////////////////////
-	ntshell_init(
-			&ntshell,
-			func_read,
-			func_write,
-			func_callback,
-			(void *)(&ntshell));
-
-	ntshell_set_prompt(&ntshell, PROMPTSTR);
-	Serial.println(F("welcome to s.k.e.l.e.t.o.r \r\n type 'help' for help."));
-	Serial.print(PROMPTSTR);
-	Serial.flush();
-	//////////////////////////////		NTSHELL		//////////////////////////////
-#endif // #ifdef SKELETOR_FEATURE_SHELL
+#ifdef SKELETOR_FEATURE_SHELLARDUINO
+	//////////////////////////////		NTSHELL ARDUINO		//////////////////////////////
+	initialize_shell();
+	//////////////////////////////		NTSHELL ARDUINO		//////////////////////////////
+#endif // #ifdef SKELETOR_FEATURE_SHELLARDUINO
 
 
-#ifdef SKELETOR_FEATURE_SSD1306
-	//////////////////////////////		SSD1306 DISPLAY		//////////////////////////////
-	// Initialising the UI will init the display too.
-	display.init();
+#ifdef SKELETOR_FEATURE_SSD1306ARDUINO
+	//////////////////////////////		SSD1306 ARDUINO		//////////////////////////////
+	configureSSD1306Display();
+	//////////////////////////////		SSD1306 ARDUINO		//////////////////////////////
+#endif // #ifdef SKELETOR_FEATURE_SSD1306ARDUINO
 
-	//display.flipScreenVertically();
-	display.setFont(ArialMT_Plain_16);
 
-	// clear the display
-	display.flipScreenVertically();
-	display.setContrast(255);
-	display.clear();
+#ifdef SKELETOR_FEATURE_WIFIARDUINO
+	//////////////////////////////		WIFI ARDUINO		//////////////////////////////
+	configureWiFiAPMode();
+	delay(1000); // without this the AP START event does not happen ? KK TODO check this, possible bug.
+	configureWiFiSTAMode();
+	//////////////////////////////		WIFI ARDUINO		//////////////////////////////
+#endif // #ifdef SKELETOR_FEATURE_WIFIARDUINO
 
-	//display.drawXbm(34, 14, WiFi_Logo_width, WiFi_Logo_height, WiFi_Logo_bits);
 
-	display.setTextAlignment(TEXT_ALIGN_CENTER);
-	display.drawString(64, 22, "s.k.E.l.E.t.O.r");
+#ifdef SKELETOR_FEATURE_MQTTARDUINO
+	//////////////////////////////		MQTT ARDUINO		//////////////////////////////
+	configureMqtt();
+	//////////////////////////////		MQTT ARDUINO		//////////////////////////////
+#endif // #ifdef SKELETOR_FEATURE_MQTTARDUINO
 
-	// write the buffer to the display
-	display.display();
-	display.setTextAlignment(TEXT_ALIGN_LEFT);
-	//////////////////////////////		SSD1306 DISPLAY		//////////////////////////////
-#endif // #ifdef SKELETOR_FEATURE_SSD1306
 
-	// send task notification to hello task, setup is done.
-	/* Set bit 1 in the notification value of the task referenced by xTask1Handle. */
-	if(xTaskNotify( xTaskToNotify, ( 1UL ), eSetBits ) == pdPASS)
+	// send task notification to worker task a, initial setup is done.
+	/* Set bit 1 in the notification value of the task referenced by xTaskHandle_worker_a. */
+	if(xTaskNotify( xTaskHandle_worker_a, ( 1UL ), eSetBits ) == pdPASS)
 	{
 		/* The task's notification value was updated. */
-		printf("\n\nhello_task notified ok.\n");
+		//printf("\n\nworker task b notified ok.\n");
 	}
 	else
 	{
 		/* The task's notification value was not updated. */
-		printf("\n\nhello_task notification failed.\n");
+		printf("\n\nworker task b notification failed.\n");
 	}
 }
+
 
 void loop()
 {
 
-#ifdef SKELETOR_FEATURE_SHELL
-	//////////////////////////////		NTSHELL		//////////////////////////////
-	while(Serial.available())
-	{
-		ntshell_execute_arduino(&ntshell);
-	}
-	//////////////////////////////		NTSHELL		//////////////////////////////
-#endif // #ifdef SKELETOR_FEATURE_SHELL
+#ifdef SKELETOR_FEATURE_SHELLARDUINO
+	//////////////////////////////		NTSHELL ARDUINO		//////////////////////////////
+	poll_shell();
+	//////////////////////////////		NTSHELL ARDUINO		//////////////////////////////
+#endif // #ifdef SKELETOR_FEATURE_SHELLARDUINO
 
 }
 
 
+// this is the standard arduino freertos task template, no need to change.
 void arduinoTask(void *pvParameters)
 {
 	setup();
+
 	for(;;)
 	{
-		micros(); //update overflow
+		micros(); // update overflow
 		loop();
 	}
 }
 //////////////////////////////		ARDUINO TASK		//////////////////////////////
 
 
-
+//////////////////////////////		ENTRY POINT		//////////////////////////////
 extern "C" void app_main()
 {
-	nvs_flash_init();
+	esp_err_t ret;
 
-	xTaskCreatePinnedToCore(hello_task, "hello_task", 2048, NULL, 1, NULL, APP_TASKS_RUNNING_CORE);
+	ret = nvs_flash_init();
+	if(ret != ESP_OK)
+	{
+		printf("nvs_flash_init FAILED! error code = [0x%X]\n",ret);
+	}
+	else
+	{
+		printf("nvs_flash_init ok.\n");
+	}
+
+
+	xTaskCreatePinnedToCore(worker_task_a, "worker_task_a", 2048, NULL, 1, NULL, APP_TASKS_RUNNING_CORE);
+	xTaskCreatePinnedToCore(worker_task_b, "worker_task_b", 2048, NULL, 1, NULL, APP_TASKS_RUNNING_CORE);
 
 	xTaskCreatePinnedToCore(arduinoTask, "arduinoTask", 8192, NULL, 1, NULL, APP_TASKS_RUNNING_CORE);
 }
-
+//////////////////////////////		ENTRY POINT		//////////////////////////////

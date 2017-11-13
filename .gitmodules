@@ -7,3 +7,9 @@
 [submodule "components/ssd1306"]
 	path = components/ssd1306
 	url = https://github.com/coolbreeze413/espidf_c_ssd1306
+[submodule "components/AsyncTCP"]
+	path = components/AsyncTCP
+	url = https://github.com/me-no-dev/AsyncTCP
+[submodule "components/async-mqtt-client"]
+	path = components/async-mqtt-client
+	url = https://github.com/coolbreeze413/async-mqtt-client

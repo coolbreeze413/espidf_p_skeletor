@@ -1,0 +1,17 @@
+(1) WiFi does not work (STA cannot connect to router)
+
+wifi may not work because of nvs_open failing. this can happen if the nvs partition got truncated.
+This will cause error traces (usually enabled by default in the config) such as:
+        
+        W (84) wifi: wifi nvs_open fail ret=4353
+
+        E (84) wifi: wifi_init 1410 ret=4353
+        [E][WiFiGeneric.cpp:120] wifiLowLevelInit(): esp_wifi_init 4353
+        W (87) wifi: wifi nvs_open fail ret=4353
+
+to fix the nvs partition, we need to erase the flash, there is a make target for that:
+"make erase_flash"
+and then retry "make flash"
+If the nvs was the problem, this will fix it.
+Also, nvs_flash_init() is required in main() -> check that the return value is ESP_OK.
+This will immediately point to the nvs problem, if it exists.

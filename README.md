@@ -54,16 +54,15 @@ Both Makefile build system and CMake build system is configured and either can b
 
  1. Clone the repo
 
-> git clone --recursive
-> https://github.com/coolbreeze413/espidf_p_skeletor.git
+	>     git clone --recursive https://github.com/coolbreeze413/espidf_p_skeletor.git
  
  2. Clone the esp-idf repo
-	>  git clone --recursive https://github.com/espressif/esp-idf.git
+	>     git clone --recursive https://github.com/espressif/esp-idf.git
 
-	It is recommended to keep 2 separate esp-idf repos
-		- one for projects which use arduino-esp32 as a esp-idf component
+	It is recommended to keep 2 separate esp-idf repos:
+	- one for projects which use arduino-esp32 as a esp-idf component
 		(**this is the one which we will be using for building this project**)
-				- one for projects which do not
+	- one for projects which do not
 
 3. Move to the right revision of esp-idf to which the arduino-esp32 is based on. Later revisions of esp-idf may cause compilation issues in the arduino-esp32 component build. Sometimes, even this revision, though being the one on which the arduino-esp32 is based on, may cause (minor) issues, as the arduino-esp32 repo may have outstanding bugs or issues. In general this step should give a fully working setup, or very close to one.
 YMMV.
@@ -87,7 +86,7 @@ YMMV.
 		> from the above example, the hash is 977854975
 		
 	- cd to the esp-idf repo and check the details of that commit, it will roughly match
-		>     git show \<hash\>
+		>     git show <hash>
 
 	- you should see something like:
 		>     git show 977854975                                                    
@@ -105,7 +104,7 @@ YMMV.
 		>          See merge request idf/esp-idf!4040
 
 	- roll (back) the esp-idf repo to that revision
-		>     git checkout \<hash\>
+		>     git checkout <hash>
 
 	- you should see something like (with the example above)
 		>     git checkout 9778549759eb2032c72224417bedfb9a2fece5f9
@@ -125,8 +124,10 @@ YMMV.
 	
 	- remember that whenever we update the arduino-esp32 repo, we have to do the same steps as above.
 
-	**NOTE:** if you are starting a fresh esp-df project which uses the arduino-esp32 as a component, ensure that the base or initial sdkconfig is taken from the arduino-esp32 repo's sdkconfig, otherwise the arduino core will not behave as you would expect. The sdkconfig in the arduino-esp32 usually lives here, copy this file to your project's root directory. You can make further changes as needed for your project on top of this.
-		>     arduino-esp32/tools/sdk/sdkconfig
+	**NOTE:** if you are starting a fresh esp-df project which uses the arduino-esp32 as a component, ensure that the base or initial sdkconfig is taken from the arduino-esp32 repo's sdkconfig, otherwise the arduino core will not behave as you would expect. The sdkconfig in the arduino-esp32 usually lives here:
+	>     arduino-esp32/tools/sdk/sdkconfig
+	copy this file to your project's root directory. You can make further changes as needed for your project on top of this.
+		
 
 4. move to the project directory and build as usual for any esp-idf project
 	>     make menuconfig 

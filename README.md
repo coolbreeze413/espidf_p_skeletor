@@ -13,7 +13,7 @@
 ASCII Art thanks to:
 http://patorjk.com/software/taag/#p=display&h=0&v=0&f=ANSI%20Shadow&t=skeletor
 
-1. esp-idf and  arduino-esp32
+1. [esp-idf and arduino-esp32](#esp-idf-and-arduino-esp32)
 2. project structure
 3. project setup
 4. spiffs filesystem and usage in project
@@ -23,6 +23,7 @@ http://patorjk.com/software/taag/#p=display&h=0&v=0&f=ANSI%20Shadow&t=skeletor
 8. use with VSCODE
 9. maintenance and keeping up with esp-idf/arduino-esp32 updates
 
+<a name="esp-idf-and-arduino-esp32"/>
 ## esp-idf and arduino-esp32
 
 esp-idf is the official development SDK for the esp32 and is complete in and of itself. This has the entire core (FreeRTOS based) plus functionalities neatly divided into "components" to keep it modular.
@@ -52,9 +53,11 @@ TBD
 Project structure is the same as any esp-idf project. The addition is the use of the Arduino core as an esp-idf component of the project.
 Both Makefile build system and CMake build system is configured and either can be used.
 
- 1. Clone the repo
+ 1. Clone the repo, cd to the repo dir, sync the submodules (as they have further submodules)
 
 	>     git clone --recursive https://github.com/coolbreeze413/espidf_p_skeletor.git
+	>     cd espidf_p_skeletor
+	>     git submodule update --init --recursive
  
  2. Clone the esp-idf repo
 	>     git clone --recursive https://github.com/espressif/esp-idf.git
@@ -66,7 +69,8 @@ Both Makefile build system and CMake build system is configured and either can b
 
 3. Move to the right revision of esp-idf to which the arduino-esp32 is based on. Later revisions of esp-idf may cause compilation issues in the arduino-esp32 component build. Sometimes, even this revision, though being the one on which the arduino-esp32 is based on, may cause (minor) issues, as the arduino-esp32 repo may have outstanding bugs or issues. In general this step should give a fully working setup, or very close to one.
 YMMV.
-	- open a console at the arduino-esp32 repo that you cloned
+	- open a console at the arduino-esp32 component of the project
+		>     espidf_p_skeletor/components/arduino-esp32
 	
 	- search for the last update involving esp-idf
 		>     git log --grep "IDF"
@@ -129,26 +133,23 @@ YMMV.
 	copy this file to your project's root directory. You can make further changes as needed for your project on top of this.
 		
 
-4. move to the project directory and build as usual for any esp-idf project
-	>     make menuconfig 
-	>     make -j4
-	### **Remember to set the IDF_PATH environment variable to point to the correct esp-idf repo which has been aligned to the arduino-esp32 above  before project build !**
-
- 
-
-## spiffs filesystem and usage in project
-
-TBD
+4. move to the project directory and build as usual for any esp-idf project.
+Look at the appropriate steps for Makefile Build System or CMake Build System.
+	
 
 ## build and flash with Makefile build system (esp-idf v3.x default)
 
-TBD
+### **Remember to set the IDF_PATH environment variable to point to the correct esp-idf repo which has been aligned to the arduino-esp32 above  before project build !**
 
 
 ## build and flash with CMake build system (esp-idf v4.x default)
 
-TBD
+### **Remember to set the IDF_PATH environment variable to point to the correct esp-idf repo which has been aligned to the arduino-esp32 above  before project build !**
 
+
+## spiffs filesystem and usage in project
+
+TBD
 
 ## use with Eclipse CDT
 

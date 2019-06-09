@@ -13,3 +13,18 @@
 [submodule "components/async-mqtt-client"]
 	path = components/async-mqtt-client
 	url = https://github.com/coolbreeze413/async-mqtt-client
+[submodule "components/espidf_c_arduino_LoRa"]
+	path = components/espidf_c_arduino_LoRa
+	url = https://github.com/coolbreeze413/espidf_c_arduino_LoRa
+[submodule "components/espidf_c_arduino_SSD1306"]
+	path = components/espidf_c_arduino_SSD1306
+	url = https://github.com/coolbreeze413/espidf_c_arduino_SSD1306.git
+[submodule "components/espidf_c_arduino_NTShell"]
+	path = components/espidf_c_arduino_NTShell
+	url = https://github.com/coolbreeze413/espidf_c_arduino_NTShell.git
+[submodule "components/espidf_c_arduino_AsyncMQTTClient"]
+	path = components/espidf_c_arduino_AsyncMQTTClient
+	url = https://github.com/coolbreeze413/espidf_c_arduino_AsyncMQTTClient.git
+[submodule "components/espidf_c_arduino_AsyncTCP"]
+	path = components/espidf_c_arduino_AsyncTCP
+	url = https://github.com/coolbreeze413/espidf_c_arduino_AsyncTCP

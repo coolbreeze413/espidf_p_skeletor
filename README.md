@@ -145,26 +145,26 @@ Look at the appropriate steps for [Makefile Build System](#build-flash-makefile)
 
 ## build and flash with Makefile build system (esp-idf v3.x default)
 
-### **Remember to set the IDF_PATH environment variable to point to the correct esp-idf repo which has been aligned to the arduino-esp32 above  before project build !**
-
-Setup the msys2 based toolchain as per instructions.
-Choose the right sdkconfig - remove existing "sdkconfig" file and copy "sdkconfig-makefile" as the new "sdkconfig".
-
->     make menuconfig
->     make -j4
+- **Remember to set the IDF_PATH environment variable to point to the correct esp-idf repo which has been aligned to the arduino-esp32 above  before project build !**
+- Setup the MSYS2 based Makefile toolchain as per instructions.
+- Choose the right sdkconfig - delete existing "sdkconfig" file and copy "sdkconfig-cmake" as the new "sdkconfig".
+- If migrating from one build system to another, ensure to delete the "build" directory.
+- build project using :
+	>     make menuconfig
+	>     make -j4
 
 
 <a name="build-flash-cmake"/>
 
 ## build and flash with CMake build system (esp-idf v4.x default)
 
-### **Remember to set the IDF_PATH environment variable to point to the correct esp-idf repo which has been aligned to the arduino-esp32 above  before project build !**
-
-Setup the CMake toolchain as per instructions.
-Choose the right sdkconfig - remove existing "sdkconfig" file and copy "sdkconfig-cmake" as the new "sdkconfig".
-
->     py -2 %IDF_PATH%/tools/idf.py menuconfig
->     py -2 %IDF_PATH%/tools/idf.py build
+- **Remember to set the IDF_PATH environment variable to point to the correct esp-idf repo which has been aligned to the arduino-esp32 above  before project build !**
+- Setup the CMake toolchain as per instructions.
+- Choose the right sdkconfig - delete existing "sdkconfig" file and copy "sdkconfig-cmake" as the new "sdkconfig".
+- If migrating from one build system to another, ensure to delete the "build" directory.
+- build project using :
+	>     py -2 %IDF_PATH%/tools/idf.py menuconfig
+	>     py -2 %IDF_PATH%/tools/idf.py build
 
 
 ## spiffs filesystem and usage in project

@@ -5,6 +5,10 @@
  *      Author: krish
  */
 
+#include "skeletor_config.h"
+
+#ifdef SKELETOR_FEATURE_MQTTARDUINO
+
 #include "Arduino.h"
 #include <AsyncMqttClient.h>
 #include <WiFi.h>
@@ -155,3 +159,5 @@ void configureMqtt()
 
 	mqttClient.setWill(SKELETOR_MQTT_TOPIC_STATUS, 2, true, SKELETOR_MQTT_STATUS_DEAD);
 }
+
+#endif // #ifdef SKELETOR_FEATURE_MQTTARDUINO

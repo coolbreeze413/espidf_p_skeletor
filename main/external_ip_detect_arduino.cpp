@@ -5,9 +5,10 @@
  *      Author: krish
  */
 
+#include "skeletor_config.h"
 
-// dependency:
-// 1. Arduino Core (String class, WiFiClient)
+#ifdef SKELETOR_FEATURE_WIFIARDUINO
+
 
 #include "Arduino.h"
 #include "WiFi.h"
@@ -28,8 +29,10 @@ WiFiClient ipDetectHTTPClient;
 String detectExternalIP()
 {
 	// check if we are connected to WiFi, else return 0.0.0.0
-	// TODO
-
+	if(!WiFi.isConnected())
+	{
+		return String("0.0.0.0");
+	}
 
 	// talk to external webserver and detect our wan side ip address.
 
@@ -51,14 +54,17 @@ String detectExternalIP()
 	//Serial.println(url);
 
 	// This will send the request to the server
-	ipDetectHTTPClient.print(
-			String("GET ") + url + " HTTP/1.1\r\n" +
-			"Host: " + host + "\r\n" +
-			"Connection: close\r\n\r\n"
-			);
-	unsigned long timeout = millis();
-	while (ipDetectHTTPClient.available() == 0) {
-		if (millis() - timeout > 5000)
+	ipDetectHTTPClient.print
+	(
+		String("GET ") + url + " HTTP/1.1\r\n" +
+		"Host: " + host + "\r\n" +
+		"Connection: close\r\n\r\n"
+	);
+
+	unsigned long time_of_start = millis();
+	while (ipDetectHTTPClient.available() == 0)
+	{
+		if (millis() - time_of_start > 5000)
 		{
 			Serial.println(">>> ipDetectHTTPClient Timeout !");
 			ipDetectHTTPClient.stop();
@@ -92,14 +98,16 @@ String detectExternalIP()
 
 	lastUpdate = httpResponse.substring(dateBeginningIndex, dateEndIndex);
 
-	Serial.print("ipAddress: ");Serial.println(temp);
-	Serial.print("Updated  : ");Serial.println(lastUpdate);
+	Serial.print("ipAddress: ");	Serial.println(temp);
+	Serial.print("Updated  : ");	Serial.println(lastUpdate);
 
 	if(!externalIP.equals(temp))
 	{
 		Serial.println("ip address has changed now.");
 		externalIP = temp; 			// update
+#ifdef SKELETOR_FEATURE_MQTTARDUINO
 		publishIPAddress(); 		// publish
+#endif // #ifdef SKELETOR_FEATURE_MQTTARDUINO
 	}
 	else
 	{
@@ -107,14 +115,14 @@ String detectExternalIP()
 	}
 
 
-//	 for(int j=0; j< httpResponse.length(); j++)
-//	 {
-//		 Serial.print(j);
-//		 Serial.print(" ");
-//		 Serial.println(httpResponse.charAt(j), HEX);
-//	 }
+	//	 for(int j=0; j< httpResponse.length(); j++)
+	//	 {
+	//		 Serial.print(j);
+	//		 Serial.print(" ");
+	//		 Serial.println(httpResponse.charAt(j), HEX);
+	//	 }
 
-//	 Serial.println(ipBeginningIndex);
+	//	 Serial.println(ipBeginningIndex);
 
 
 	// clear the http response string object.
@@ -124,3 +132,4 @@ String detectExternalIP()
 }
 
 
+#endif // SKELETOR_FEATURE_WIFIARDUINO

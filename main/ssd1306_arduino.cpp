@@ -5,6 +5,9 @@
  *      Author: krish
  */
 
+#include "skeletor_config.h"
+
+#ifdef SKELETOR_FEATURE_SSD1306ARDUINO
 
 // Include the correct display library
 // For a connection via I2C using Wire include
@@ -41,12 +44,29 @@
 // SH1106Brzo  display(0x3c, D3, D5);
 
 // Initialize the OLED display using Wire library
+#ifdef SKELETOR_BOARD_WEMOS_OLED
 SSD1306  display(0x3c, 5, 4);
+#endif // SKELETOR_BOARD_WEMOS_OLED
+
+#ifdef SKELETOR_BOARD_TTGO_LORA32
+SSD1306  display(0x3c, 4, 15); // for lora32
+#endif // SKELETOR_BOARD_TTGO_LORA32
+
 // SH1106 display(0x3c, D3, D5);
 
 
 void configureSSD1306Display()
 {
+
+#ifdef SKELETOR_BOARD_TTGO_LORA32
+	pinMode(16, OUTPUT);
+	digitalWrite(16, LOW);
+	delay(50);
+	digitalWrite(16, HIGH);
+
+	pinMode(25,OUTPUT);
+#endif // #ifdef SKELETOR_BOARD_TTGO_LORA32
+
 	// Initialising the UI will init the display too.
 	display.init();
 
@@ -86,3 +106,16 @@ void displayExternalIPAddress(String ipAddress)
 	display.drawString(0,0, ipAddress);
 	display.display();
 }
+
+// Sender: packetStats -> "TX: N"
+// Receiver: packetStats -> "RX: x y" x->rssi, y->snr
+void displayLoRaPacket(String packet)
+{
+	display.setColor(BLACK);
+	display.fillRect(0, 0, 128, 20); // clear the area.
+	display.setColor(WHITE);
+	display.drawString(0,0, packet);
+	display.display();
+}
+
+#endif // SKELETOR_FEATURE_SSD1306ARDUINO

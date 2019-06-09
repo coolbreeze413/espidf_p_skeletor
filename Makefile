@@ -3,7 +3,7 @@
 # project subdirectory.
 #
 
-PROJECT_NAME := esp32_vt100_espidf
+PROJECT_NAME := skeletor
 
 include $(IDF_PATH)/make/project.mk
 

@@ -1,0 +1,7 @@
+#feature,enabled(0 or 1),param1,param2,...
+#wifi_sta,enabled,ssid_to_connect,passkey
+wifi_sta,1,moya,leviathanstarburst
+#wifi_ap,enabled,ssid_to_create,passkey_to_set
+wifi_ap,1,skeletor,skeletor
+#wifi_sta_retry,enabled,interval_between_retry,max_num_of_retries
+wifi_sta_retry,1,5000,10

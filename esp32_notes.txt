@@ -12,6 +12,11 @@ This will cause error traces (usually enabled by default in the config) such as:
 to fix the nvs partition, we need to erase the flash, there is a make target for that:
 "make erase_flash"
 and then retry "make flash"
-If the nvs was the problem, this will fix it.
+if the nvs corruption was the problem, this will fix it.
 Also, nvs_flash_init() is required in main() -> check that the return value is ESP_OK.
 This will immediately point to the nvs problem, if it exists.
+
+
+(2) nvs_flash_init FAILED! error code = [0x105]
+this means that the nvs partition was not found !
+the nvs partition label must be "nvs" ! (alongwith type: data, subtype: nvs)

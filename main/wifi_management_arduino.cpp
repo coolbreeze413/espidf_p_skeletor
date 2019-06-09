@@ -5,6 +5,9 @@
  *      Author: krish
  */
 
+#include "skeletor_config.h"
+
+#ifdef SKELETOR_FEATURE_WIFIARDUINO
 
 #include <WiFi.h>
 #include "wifi_management_arduino.h"
@@ -107,7 +110,9 @@ void onWiFiEventCallback(system_event_id_t event, system_event_info_t info)
 		{
 			printf("ap [%s] started, interface IP: [%s]\n", WIFI_AP_SSID, WiFi.softAPIP().toString().c_str());
 
+#ifdef SKELETOR_FEATURE_SSD1306ARDUINO
 			displayCount(WiFi.softAPgetStationNum());
+#endif // #ifdef SKELETOR_FEATURE_SSD1306ARDUINO
 		}
 		break;
 
@@ -129,7 +134,9 @@ void onWiFiEventCallback(system_event_id_t event, system_event_info_t info)
 					sta_info.mac[4],
 					sta_info.mac[5]);
 
+#ifdef SKELETOR_FEATURE_SSD1306ARDUINO
 			displayCount(WiFi.softAPgetStationNum());
+#endif // #ifdef SKELETOR_FEATURE_SSD1306ARDUINO
 		}
 		break;
 
@@ -145,7 +152,9 @@ void onWiFiEventCallback(system_event_id_t event, system_event_info_t info)
 					sta_info.mac[4],
 					sta_info.mac[5]);
 
+#ifdef SKELETOR_FEATURE_SSD1306ARDUINO
 			displayCount(WiFi.softAPgetStationNum());
+#endif // #ifdef SKELETOR_FEATURE_SSD1306ARDUINO
 		}
 		break;
 
@@ -158,3 +167,4 @@ void onWiFiEventCallback(system_event_id_t event, system_event_info_t info)
 	}
 }
 
+#endif // #ifdef SKELETOR_FEATURE_WIFIARDUINO

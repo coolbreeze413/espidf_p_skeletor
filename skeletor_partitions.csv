@@ -1,0 +1,47 @@
+#############################################################################################################################
+# total SPI Flash, for example is 4MB, then total size is 0x400000 (4 x 1024 x 1024)
+# reserved sections:
+# first, bootloader (stage 2) goes to 0x1000 (stage 1 bootloader loads from here to RAM and exectutes)
+# we can write a complete app in bootloader as well, TODO: max size of bootloader ? 0x8000-0x1000 ?
+# second, partition table goes to 0x8000 and has a max size of 0x0C00
+# after the partition table can be security stuff (TODO) read more
+# so we start our partitions from 0x10000 only, to be safe. APPs must be at a boundary of 64k i.e. multiple of 0x10000
+#
+# OTA_0 :       size = 0x100000     offset = 0x010000       (usually) i.e. 1M
+# OTA_1 :       size = 0x100000     offset = 0x110000       (usually) i.e. 1M
+# -OR-
+# FACTORY :     size = 0x200000     offset = 0x010000       (usually) i.e. 2M
+#
+# NVS :         size = 0x6000       offset = 0x210000       (recommended) i.e 25k       
+# OTADATA :     size = 0x1000       offset = 0x216000       (optional) i.e. 4k
+# PHY_INIT :    size = 0x1000       offset = 0x217000       (optional) i.e. 4k
+#
+# EEPROM :      size = 0x1000       offset = 0x218000       (usually - arduino eeprom lib can use this) i.e. 4k
+# EXTRA  :      size = 0x2000       offset = 0x220000       (extra space can be adjusted to one of the other partitions) i.e. 8k
+# SPIFFS :      size = 0x1C0000     offset = 0x240000       (usually) i.e ~1.7M. note: subtype = 0x82, spiffs
+# 
+# for simple single app, we use only FACTORY(no ota),   NVS,        *maybe EEPROM*      *mostly SPIFFS*
+# then we use the sizes:             0x200000,          0x8000,     0x1000,             0x1C0000
+# and offsets:                       0x010000,          0x210000,   0x2180000,          0x240000
+#
+#############################################################################################################################
+# Name,         Type,   SubType,        Offset,     Size,           Flags
+#
+factoryapp,     app,    factory,        0x010000,   0x200000,
+#
+#otaapp0,       app,    ota_0,          0x010000,   0x100000,
+#otaapp1,       app,    ota_1,          0x110000,   0x100000,
+#
+nvs,            data,   nvs,            0x210000,   0x6000,
+#
+#otadata,       data,   ota,            0x216000,   0x1000,
+#
+#phydata,       data    phy,            0x217000,   0x1000,
+# 
+#eepromdata,    data,   0x99,           0x218000,   0x1000,
+#
+#extradata,     data,   0x99,           0x220000,   0x2000,
+#
+spiffsdata,     data,   spiffs,         0x240000,   0x1C0000,
+#
+# END PARTITION TABLE at 0x400000 -> 4M

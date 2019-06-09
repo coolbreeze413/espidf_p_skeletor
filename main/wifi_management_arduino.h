@@ -11,8 +11,9 @@
 #include "Arduino.h"
 #include <WiFi.h>
 
-#define WIFI_STA_SSID 				"anantha"
-#define WIFI_STA_PASSWORD 			"anantha12345"
+
+#define WIFI_STA_SSID 				"moya"
+#define WIFI_STA_PASSWORD 			"leviathanstarburst"
 
 #define WIFI_AP_SSID				"skeletor"
 #define WIFI_AP_PASSWORD			"skeletor"

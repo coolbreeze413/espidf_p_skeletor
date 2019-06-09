@@ -1,0 +1,57 @@
+/*
+ * skeletor_config.h
+ *
+ *  Created on: Jan 29, 2018
+ *      Author: krish
+ */
+
+#ifndef MAIN_SKELETOR_CONFIG_H_
+#define MAIN_SKELETOR_CONFIG_H_
+
+
+#define SKELETOR_BOARD_WEMOS_OLED // works for all ESP32-WROVER/ESP-WROOM32 boards
+//#define SKELETOR_BOARD_TTGO_LORA32
+
+#define SKELETOR_DEBUG
+
+
+#define SKELETOR_FEATURE_SHELLARDUINO
+
+
+#define SKELETOR_FEATURE_SSD1306ARDUINO
+
+
+#define SKELETOR_FEATURE_WIFIARDUINO
+
+
+#define SKELETOR_FEATURE_MQTTARDUINO
+
+
+//#define SKELETOR_FEATURE_LORA
+#ifdef SKELETOR_FEATURE_LORA
+//#define SKELETOR_FEATURE_LORA_SENDER
+#define SKELETOR_FEATURE_LORA_RECEIVER
+#endif // #ifdef SKELETOR_FEATURE_LORA
+
+
+#define SKELETOR_FEATURE_USERLED1
+#ifdef SKELETOR_FEATURE_USERLED1
+	#ifdef SKELETOR_BOARD_TTGO_LORA32
+		#define USERLED1_PIN			25
+	#endif // #ifdef SKELETOR_BOARD_TTGO_LORA32
+#endif // #ifdef SKELETOR_FEATURE_USERLED1
+
+
+#define SKELETOR_FEATURE_SPIFFS
+#ifdef SKELETOR_FEATURE_SPIFFS
+	// select *ONE* of the below: native usage of spiffs idf component or arduino wrappers.
+	#define SKELETOR_FEATURE_SPIFFSESPIDF
+	#define SKELETOR_FEATURE_SPIFFSARDUINO
+#endif // #ifdef SKELETOR_FEATURE_SPIFFS
+
+
+#define APP_TASKS_RUNNING_CORE 		1
+
+
+
+#endif /* MAIN_SKELETOR_CONFIG_H_ */

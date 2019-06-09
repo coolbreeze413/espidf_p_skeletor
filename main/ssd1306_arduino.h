@@ -14,7 +14,7 @@ void configureSSD1306Display();
 
 void displayCount(uint32_t count);
 void displayExternalIPAddress(String ipAddress);
-
+void displayLoRaPacket(String packet);
 
 
 

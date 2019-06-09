@@ -31,6 +31,10 @@
    OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include "skeletor_config.h"
+
+#ifdef SKELETOR_FEATURE_SHELLARDUINO
+
 #include "ntopt.h"
 #include "ntlibc.h"
 #include <Arduino.h>
@@ -192,9 +196,11 @@ static int usrcmd_info(int argc, char **argv)
 	return -1;
 }
 
+#ifdef SKELETOR_FEATURE_SSD1306ARDUINO
 #include <Wire.h>  // Only needed for Arduino 1.6.5 and earlier
 #include "SSD1306.h" // alias for `#include "SSD1306Wire.h"`
 extern SSD1306 display;
+#endif // #ifdef SKELETOR_FEATURE_SSD1306ARDUINO
 int usrcmd_oled(int argc, char **argv)
 {
 	if (argc != 2)
@@ -203,15 +209,14 @@ int usrcmd_oled(int argc, char **argv)
 		return 0;
 	}
 
-
-
+#ifdef SKELETOR_FEATURE_SSD1306ARDUINO
 	display.setColor(BLACK);
 	display.fillRect(0, 0, 128, 20); // clear the area.
 
 	display.setColor(WHITE);
 	display.drawString(5,5, String(argv[1]));
 	display.display();
-
+#endif // #ifdef SKELETOR_FEATURE_SSD1306ARDUINO
 	return 0;
 }
 
@@ -227,7 +232,9 @@ int usrcmd_extip(int argc, char **argv)
 		return 0;
 	}
 
+#ifdef SKELETOR_FEATURE_WIFIARDUINO
 	externalIPAddress = detectExternalIP();
+#endif // #ifdef SKELETOR_FEATURE_WIFIARDUINO
 
 	//uart_puts("current ip address: ");
 	//uart_puts(externalIPAddress);
@@ -236,3 +243,4 @@ int usrcmd_extip(int argc, char **argv)
 	return 0;
 }
 
+#endif // #ifdef SKELETOR_FEATURE_SHELLARDUINO

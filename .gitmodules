@@ -13,3 +13,6 @@
 [submodule "components/espidf_c_arduino_AsyncTCP"]
 	path = components/espidf_c_arduino_AsyncTCP
 	url = https://github.com/coolbreeze413/espidf_c_arduino_AsyncTCP
+[submodule "components/arduino-esp32"]
+	path = components/arduino-esp32
+	url = https://github.com/coolbreeze413/arduino-esp32.git

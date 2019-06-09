@@ -179,7 +179,19 @@ TBD
 
 ## use with VSCODE
 
-TBD
+- TBD the environment variables to be set
+- depending on Makefile Build System or CMake Build System, choose one of the vscode settings directory :
+	- vscode-makefile
+	- vscode-cmake
+- copy the selected directory and rename it to ".vscode". Windows Explorer/Shell does not allow this, use a bash-like console (Cygwin/git-bash/MinGW32 bash/Cmder ...)
+- launch vscode and use "open folder" and select the project folder
+- allow some time for Intellisense and Parsing to complete, takes a few minutes.
+
+
+We can easily browse the entire project, components and esp-idf easily and quickly
+
+
+Also look at : Recommended vscode extensions for programmers to get the most out of vscode.
 
 
 ## maintenance and keeping up with esp-idf/arduino-esp32 updates

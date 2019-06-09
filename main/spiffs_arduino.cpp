@@ -16,11 +16,13 @@ void listDir(fs::FS &fs, const char * dirname, uint8_t levels)
     Serial.printf("Listing directory: %s\r\n", dirname);
 
     File root = fs.open(dirname);
-    if(!root){
+    if (!root)
+    {
         Serial.println("- failed to open directory");
         return;
     }
-    if(!root.isDirectory()){
+    if (!root.isDirectory())
+    {
         Serial.println(" - not a directory");
         return;
     }

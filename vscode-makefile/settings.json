@@ -1,0 +1,19 @@
+{
+    "C_Cpp.intelliSenseEngine": "Default",
+    "C_Cpp.intelliSenseEngineFallback": "Disabled",
+    "files.associations": {
+        "*.h": "c",
+        "*.hpp": "cpp"
+    },
+    // makefile build: use MinGW32 bash as integrated terminal
+    "terminal.integrated.shell.windows": 
+        "X:/esp32/esp32_win32_msys2_environment_and_toolchain-20181001/msys32/usr/bin/bash.exe",
+    "terminal.integrated.shellArgs.windows": [
+        "--login",
+    ],
+    "terminal.integrated.env.windows": {
+        "CHERE_INVOKING": "1",
+        "MSYSTEM": "MINGW32",
+    },
+    "C_Cpp.errorSquiggles": "Disabled",
+}

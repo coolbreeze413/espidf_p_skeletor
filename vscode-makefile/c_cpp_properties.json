@@ -1,0 +1,28 @@
+{
+    "configurations": [
+        {
+            "name": "ESP32",
+            "includePath": [
+                "${workspaceRoot}/**",
+                "${IDF_PATH}/components/**",
+                "${XTENSA_ESP32_ELF_PATH}/xtensa-esp32-elf/**",
+                "${workspaceRoot}/components/**"
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": "build/vscode.db",
+                "path": [
+                    "${workspaceRoot}/**",
+                    "${IDF_PATH}/components/**",
+                    "${XTENSA_ESP32_ELF_PATH}/xtensa-esp32-elf/**",
+                    "${workspaceRoot}/components/**"
+                ]
+            },
+            "intelliSenseMode": "${default}",
+            "compilerPath": "${XTENSA_ESP32_ELF_PATH}/bin/xtensa-esp32-elf-gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

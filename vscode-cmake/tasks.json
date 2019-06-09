@@ -1,0 +1,111 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build app",
+            "group": "build",
+            "command": "py",
+            "type": "shell",            
+            "args": [
+                "-2",
+                "%IDF_PATH%/tools/idf.py",
+                "build"
+            ],
+            "presentation": {
+                "reveal": "always",
+            },
+            "problemMatcher": {
+                "owner": "cpp",
+                "fileLocation": "absolute",
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+        {
+            "label": "clean app",
+            "command": "py",
+            "type": "shell",
+            "args": [
+                "-2",
+                "%IDF_PATH%/tools/idf.py",
+                "clean"
+            ],
+            "presentation": {
+                "reveal": "always",
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "fullclean",
+            "command": "py",
+            "type": "shell",
+            "args": [
+                "-2",
+                "%IDF_PATH%/tools/idf.py",
+                "fullclean"
+            ],
+            "presentation": {
+                "reveal": "always",
+            },
+            "problemMatcher": []
+        },        
+        {
+            "label": "flash app",
+            "command": "py",
+            "type": "shell",
+            "args": [
+                "-2",
+                "%IDF_PATH%/tools/idf.py",
+                "-p",
+                "%ESP32_COM_PORT%",
+                "flash"
+            ],
+            "presentation": {
+                "reveal": "always",
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "monitor",
+            "type":"shell",
+            "windows": {
+                "command": "py",
+                "args": [
+                    "-2",
+                    "%IDF_PATH%/tools/idf.py",
+                    "-p",
+                    "%ESP32_COM_PORT%",
+                    "monitor"
+                ],                    
+            },
+            "presentation": {
+                "reveal": "always",
+            },
+            "problemMatcher": []            
+        },
+        {
+            "label": "menuconfig",
+            "type":"shell",
+            "windows": {
+                "command": "py",
+                "args": [
+                    "-2",
+                    "%IDF_PATH%/tools/idf.py",
+                    "menuconfig"
+                ]
+            },
+            "presentation": {
+                "reveal": "always",
+            },
+            "problemMatcher": []
+        }
+    ]
+}

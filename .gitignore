@@ -6,3 +6,6 @@
 # esp32 build stuff ignored
 build/
 sdkconfig.old
+
+# vscode stuff ignored
+.vscode/

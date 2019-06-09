@@ -1,0 +1,12 @@
+{
+    "C_Cpp.intelliSenseEngine": "Default",
+    "C_Cpp.intelliSenseEngineFallback": "Disabled",
+    "files.associations": {
+        "*.h": "c",
+        "*.hpp": "cpp"
+    },
+    // cmake build: default windows shell is fine
+    "terminal.integrated.shell.windows": 
+        "C:\\WINDOWS\\System32\\cmd.exe",
+    "C_Cpp.errorSquiggles": "Disabled",
+}

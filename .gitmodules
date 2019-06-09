@@ -1,18 +1,3 @@
-[submodule "components/ntshell"]
-	path = components/ntshell
-	url = https://github.com/coolbreeze413/espidf_c_ntshell
-[submodule "components/arduino-esp32"]
-	path = components/arduino-esp32
-	url = https://github.com/espressif/arduino-esp32
-[submodule "components/ssd1306"]
-	path = components/ssd1306
-	url = https://github.com/coolbreeze413/espidf_c_ssd1306
-[submodule "components/AsyncTCP"]
-	path = components/AsyncTCP
-	url = https://github.com/me-no-dev/AsyncTCP
-[submodule "components/async-mqtt-client"]
-	path = components/async-mqtt-client
-	url = https://github.com/coolbreeze413/async-mqtt-client
 [submodule "components/espidf_c_arduino_LoRa"]
 	path = components/espidf_c_arduino_LoRa
 	url = https://github.com/coolbreeze413/espidf_c_arduino_LoRa

@@ -138,7 +138,7 @@ YMMV.
 		
 
 4. move to the project directory and build as usual for any esp-idf project.
-Look at the appropriate steps for [Makefile Build System](#build-flash-makefile) or [CMake Build System](build-flash-cmake).
+Look at the appropriate steps for [Makefile Build System](#build-flash-makefile) or [CMake Build System](#build-flash-cmake).
 
 
 <a name="build-flash-makefile"/>

@@ -23,7 +23,9 @@ http://patorjk.com/software/taag/#p=display&h=0&v=0&f=ANSI%20Shadow&t=skeletor
 8. use with VSCODE
 9. maintenance and keeping up with esp-idf/arduino-esp32 updates
 
+
 <a name="esp-idf-and-arduino-esp32"/>
+
 ## esp-idf and arduino-esp32
 
 esp-idf is the official development SDK for the esp32 and is complete in and of itself. This has the entire core (FreeRTOS based) plus functionalities neatly divided into "components" to keep it modular.
@@ -45,8 +47,10 @@ However, the Arduino core is always written to run with the latest stable esp-id
 Bleeding edge features from the latest esp-idf can in most cases be ported piecemeal into the stable esp-idf with simple changes.
 This is the approach we take in this project, for all the reasons stated above, and accepting the major tradeoff of not being able to use the bleeding edge of the esp-idf as soon as new stuff is released.
 
+
 ## project structure
 TBD
+
 
 ## project setup
 
@@ -134,22 +138,37 @@ YMMV.
 		
 
 4. move to the project directory and build as usual for any esp-idf project.
-Look at the appropriate steps for Makefile Build System or CMake Build System.
-	
+Look at the appropriate steps for [Makefile Build System](#build-flash-makefile) or [CMake Build System](build-flash-cmake).
+
+
+<a name="build-flash-makefile"/>
 
 ## build and flash with Makefile build system (esp-idf v3.x default)
 
 ### **Remember to set the IDF_PATH environment variable to point to the correct esp-idf repo which has been aligned to the arduino-esp32 above  before project build !**
 
+Setup the msys2 based toolchain as per instructions.
+
+>     make menuconfig
+>     make -j4
+
+
+<a name="build-flash-cmake"/>
 
 ## build and flash with CMake build system (esp-idf v4.x default)
 
 ### **Remember to set the IDF_PATH environment variable to point to the correct esp-idf repo which has been aligned to the arduino-esp32 above  before project build !**
 
+Setup the CMake toolchain as per instructions.
+
+>     py -2 %IDF_PATH%/tools/idf.py menuconfig
+>     py -2 %IDF_PATH%/tools/idf.py build
+
 
 ## spiffs filesystem and usage in project
 
 TBD
+
 
 ## use with Eclipse CDT
 

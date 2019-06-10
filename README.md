@@ -144,7 +144,8 @@ Look at the appropriate steps for [Makefile Build System](#build-flash-makefile)
 
 
 **NOTE:** if you are starting a fresh esp-df project which uses the arduino-esp32 as a component, ensure that the base or initial sdkconfig is taken from the arduino-esp32 repo's sdkconfig, otherwise the arduino core will not behave as you would expect. The sdkconfig in the arduino-esp32 usually lives here:
-	>     arduino-esp32/tools/sdk/sdkconfig
+>     arduino-esp32/tools/sdk/sdkconfig
+
 Copy this file to your project's root directory. You can make further changes as needed for your project on top of this.
 
 
@@ -157,6 +158,7 @@ Copy this file to your project's root directory. You can make further changes as
 - Setup the MSYS2 based Makefile toolchain as per instructions.
 - Choose the right sdkconfig - delete existing "sdkconfig" file and copy "sdkconfig-cmake" as the new "sdkconfig".
 - If migrating from one build system to another, ensure to delete the "build" directory.
+- Launch the bash shell of MSYS2 using **mingw32.exe**
 - build project using :
 	>     make menuconfig
 	>     make -j4
@@ -170,6 +172,7 @@ Copy this file to your project's root directory. You can make further changes as
 - Setup the CMake toolchain as per instructions.
 - Choose the right sdkconfig - delete existing "sdkconfig" file and copy "sdkconfig-cmake" as the new "sdkconfig".
 - If migrating from one build system to another, ensure to delete the "build" directory.
+- Launch the regular windows shell (adding a recommendation to use Cmder as your shell, it's awesome)
 - build project using :
 	>     py -2 %IDF_PATH%/tools/idf.py menuconfig
 	>     py -2 %IDF_PATH%/tools/idf.py build

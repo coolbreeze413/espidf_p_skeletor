@@ -191,8 +191,9 @@ Copy this file to your project's root directory. You can make further changes as
 	>     Linux TBD
 	
 	Or, we can build it from source as well. If so, ensure that:
-	>     meta_obj_len is set to 0
-	to match the SPIFFS implementation of the esp-idf, else it won't be readable on the ESP32.
+	>     CONFIG_SPIFFS_* values in your project sdkconfig
+	>     mkspiffs Configuration Values in include/spiffs_config.h
+	both match, else it won't be readable on the ESP32.
 	
 - There is a directory "fs" in the project root. This is the "downstream" SPIFFS root, i.e. we will be flashing the ESP32 SPIFFS image *from* this. Create a SPIFFS image using this directory:
 	>     mkspiffs.exe -c [spiffs_root_dir] [spiffs_img_path] -b [block_size] -p [page_size] -s [image_size]

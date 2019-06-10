@@ -138,12 +138,13 @@ YMMV.
 	
 	- remember that whenever we update the arduino-esp32 repo, we have to do the same steps as above.
 
-	**NOTE:** if you are starting a fresh esp-df project which uses the arduino-esp32 as a component, ensure that the base or initial sdkconfig is taken from the arduino-esp32 repo's sdkconfig, otherwise the arduino core will not behave as you would expect. The sdkconfig in the arduino-esp32 usually lives here:
-	>     arduino-esp32/tools/sdk/sdkconfig
-	copy this file to your project's root directory. You can make further changes as needed for your project on top of this.
-
 4. Move to the project directory and build as usual for any esp-idf project.
 Look at the appropriate steps for [Makefile Build System](#build-flash-makefile) or [CMake Build System](#build-flash-cmake).
+
+**NOTE:** if you are starting a fresh esp-df project which uses the arduino-esp32 as a component, ensure that the base or initial sdkconfig is taken from the arduino-esp32 repo's sdkconfig, otherwise the arduino core will not behave as you would expect. The sdkconfig in the arduino-esp32 usually lives here:
+	>     arduino-esp32/tools/sdk/sdkconfig
+Copy this file to your project's root directory. You can make further changes as needed for your project on top of this.
+
 
 
 <a name="build-flash-makefile"/>

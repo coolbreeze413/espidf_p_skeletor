@@ -13,3 +13,4 @@ sdkconfig.old
 #project specific stuff ignored
 fs_u/
 *.img
+private_*

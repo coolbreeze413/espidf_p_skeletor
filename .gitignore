@@ -9,3 +9,7 @@ sdkconfig.old
 
 # vscode stuff ignored
 .vscode/
+
+#project specific stuff ignored
+fs_u/
+*.img

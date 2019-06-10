@@ -14,14 +14,14 @@ ASCII Art thanks to:
 http://patorjk.com/software/taag/#p=display&h=0&v=0&f=ANSI%20Shadow&t=skeletor
 
 1. [esp-idf and arduino-esp32](#esp-idf-and-arduino-esp32)
-2. project structure
-3. project setup
-4. spiffs filesystem and usage in project
-5. build and flash with Makefile build system (esp-idf v3.x default)
-6. build and flash with CMake build system (esp-idf v4.x default)
-7. use with Eclipse CDT
-8. use with VSCODE
-9. maintenance and keeping up with esp-idf/arduino-esp32 updates
+2. [project structure](#project-structure)
+3. [project setup](#project-setup)
+4. [build and flash with Makefile build system (esp-idf v3.x default)](#build-flash-makefile)
+5. [build and flash with CMake build system (esp-idf v4.x default)](#build-flash-cmake)
+6. [spiffs filesystem and usage in project](#spiffs-usage)
+7. [use with Eclipse CDT](#eclipse-setup)
+8. [use with VSCODE](#vscode-setup)
+9. [maintenance and keeping up with esp-idf/arduino-esp32 updates](#maintenance)
 
 
 <a name="esp-idf-and-arduino-esp32"/>
@@ -48,16 +48,22 @@ Bleeding edge features from the latest esp-idf can in most cases be ported piece
 This is the approach we take in this project, for all the reasons stated above, and accepting the major tradeoff of not being able to use the bleeding edge of the esp-idf as soon as new stuff is released.
 
 
-## project structure
-TBD
+<a name="project-structure"/>
 
+## project structure
+
+TBD. Hello There !
+
+
+<a name="project-setup"/>
 
 ## project setup
 
 Project structure is the same as any esp-idf project. The addition is the use of the Arduino core as an esp-idf component of the project.
+
 Both Makefile build system and CMake build system is configured and either can be used.
 
- 1. Clone the repo, cd to the repo dir, sync the submodules (as they have further submodules)
+1. Clone the repo, cd to the repo dir, sync the submodules (as they have further submodules)
 
 	>     git clone --recursive https://github.com/coolbreeze413/espidf_p_skeletor.git
 	>     cd espidf_p_skeletor
@@ -132,13 +138,16 @@ YMMV.
 	
 	- remember that whenever we update the arduino-esp32 repo, we have to do the same steps as above.
 
-	**NOTE:** if you are starting a fresh esp-df project which uses the arduino-esp32 as a component, ensure that the base or initial sdkconfig is taken from the arduino-esp32 repo's sdkconfig, otherwise the arduino core will not behave as you would expect. The sdkconfig in the arduino-esp32 usually lives here:
-	>     arduino-esp32/tools/sdk/sdkconfig
-	copy this file to your project's root directory. You can make further changes as needed for your project on top of this.
-		
+4. Move to the project directory and build as usual for any esp-idf project.
 
-4. move to the project directory and build as usual for any esp-idf project.
 Look at the appropriate steps for [Makefile Build System](#build-flash-makefile) or [CMake Build System](#build-flash-cmake).
+
+
+**NOTE:** if you are starting a fresh esp-df project which uses the arduino-esp32 as a component, ensure that the base or initial sdkconfig is taken from the arduino-esp32 repo's sdkconfig, otherwise the arduino core will not behave as you would expect. The sdkconfig in the arduino-esp32 usually lives here:
+>     arduino-esp32/tools/sdk/sdkconfig
+
+Copy this file to your project's root directory. You can make further changes as needed for your project on top of this.
+
 
 
 <a name="build-flash-makefile"/>
@@ -149,6 +158,7 @@ Look at the appropriate steps for [Makefile Build System](#build-flash-makefile)
 - Setup the MSYS2 based Makefile toolchain as per instructions.
 - Choose the right sdkconfig - delete existing "sdkconfig" file and copy "sdkconfig-cmake" as the new "sdkconfig".
 - If migrating from one build system to another, ensure to delete the "build" directory.
+- Launch the bash shell of MSYS2 using **mingw32.exe**
 - build project using :
 	>     make menuconfig
 	>     make -j4
@@ -162,20 +172,68 @@ Look at the appropriate steps for [Makefile Build System](#build-flash-makefile)
 - Setup the CMake toolchain as per instructions.
 - Choose the right sdkconfig - delete existing "sdkconfig" file and copy "sdkconfig-cmake" as the new "sdkconfig".
 - If migrating from one build system to another, ensure to delete the "build" directory.
+- Launch the regular windows shell (adding a recommendation to use Cmder as your shell, it's awesome)
 - build project using :
 	>     py -2 %IDF_PATH%/tools/idf.py menuconfig
 	>     py -2 %IDF_PATH%/tools/idf.py build
 
 
+
+<a name="spiffs-usage"/>
+
 ## spiffs filesystem and usage in project
 
-TBD
+- To manipulate spiffs images on the desktop, we need the mkspiffs tool. 
 
+	Get the latest mkspiffs tool for the ESP32 from:
+	>     https://github.com/igrr/mkspiffs/releases
+	>     mkspiffs-x.x.x-arduino-esp32-win32.zip -or- mkspiffs-x.x.x-esp-idf-win32.zip (Windows)
+	>     Linux TBD
+	
+	Or, we can build it from source as well. If so, ensure that:
+	>     CONFIG_SPIFFS_* values in your project sdkconfig
+	>     mkspiffs Configuration Values in include/spiffs_config.h
+	both match, else it won't be readable on the ESP32.
+	
+- There is a directory "fs" in the project root. This is the "downstream" SPIFFS root, i.e. we will be flashing the ESP32 SPIFFS image *from* this. Create a SPIFFS image using this directory:
+	>     mkspiffs.exe -c [spiffs_root_dir] [spiffs_img_path] -b [block_size] -p [page_size] -s [image_size]
+	>     mkspiffs.exe -c fs skeletor_spiffs.img -b 4096 -p 256 -s 0x1C0000
+	*NOTE*: The block size and page size are ok, but the size **MUST** be set the same as the size of the SPIFFS partition size as set in the project partition table csv!
+	
+- Flash the created image into the ESP32 using the esptool.py:
+	>     py -2 esptool.py --chip esp32 --port [port] --baud [baud] write_flash -z [spiffs_partition_addr] [spiffs_img_path]
+	>     py -2 esptool.py --chip esp32 --port COM4 --baud 921600 write_flash -z 0x240000 skeletor_spiffs.img
+	*NOTE*: The partition address **MUST** be set the same as the address of the SPIFFS partition set in the project partition table csv!
+	
+	esptool.py can usually be found in:
+	>     esp-idf/components/esptool_py/esptool/esptool.py
+	
+- Create a separate directory in the project root named "fs_u" . This is the "upstream" SPIFFS root, i.e. we can use this to read the existing SPIFFS image from ESP32 and expand it inside this. This is kept separate from "fs" directory so that we don't inadvertently overwrite our "downstream" directory.
+
+- Read the SPIFFS image from ESP32 into our desktop's filesystem:
+	>     py -2 esptool.py --chip esp32 --port [port] --baud [baud] read_flash -z [spiffs_partition_addr] [spiffs_partition_size] [spiffs_u_img_path]
+	>     py -2 esptool.py --chip esp32 --port COM4 --baud 921600 read_flash -z 0x240000 0x1C0000 skeletor_spiffs_u.img
+	*NOTE*: The partition address and size should match that in the partition table csv. Also, name this image with a \_u so that we dont overwrite our "downstream" image by mistake.
+	
+- Decode the SPIFFS image.
+
+	We can list the contents of the spiffs image using:
+	>     mkspiffs.exe -l [spiffs_image_path]
+	>     mkspiffs.exe -l skeletor_spiffs_u.img
+	
+	We can also extract the contents into any directory and manipulate as the host sytem's filesystem:
+	>     mkspiffs.exe -u [spiffs_root_dir] [spiffs_img_path] -b [block_size] -p [page_size]
+	>     mkspiffs.exe -u fs_u skeletor_spiffs_u.img -b 4096 -p 256
+
+
+<a name="eclipse-setup"/>
 
 ## use with Eclipse CDT
 
 TBD
 
+
+<a name="vscode-setup"/>
 
 ## use with VSCODE
 
@@ -193,6 +251,8 @@ We can easily browse the entire project, components and esp-idf easily and quick
 
 Also look at : Recommended vscode extensions for programmers to get the most out of vscode.
 
+
+<a name="maintenance"/>
 
 ## maintenance and keeping up with esp-idf/arduino-esp32 updates
 

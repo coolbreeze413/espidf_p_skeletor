@@ -18,7 +18,7 @@ http://patorjk.com/software/taag/#p=display&h=0&v=0&f=ANSI%20Shadow&t=skeletor
 3. [project setup](#project-setup)
 4. [build and flash with Makefile build system (esp-idf v3.x default)](#build-flash-makefile)
 5. [build and flash with CMake build system (esp-idf v4.x default)](#build-flash-cmake)
-6. [spiffs filesystem and usage in project](spiffs-usage)
+6. [spiffs filesystem and usage in project](#spiffs-usage)
 7. [use with Eclipse CDT](#eclipse-setup)
 8. [use with VSCODE](#vscode-setup)
 9. [maintenance and keeping up with esp-idf/arduino-esp32 updates](#maintenance)
@@ -141,8 +141,8 @@ YMMV.
 	**NOTE:** if you are starting a fresh esp-df project which uses the arduino-esp32 as a component, ensure that the base or initial sdkconfig is taken from the arduino-esp32 repo's sdkconfig, otherwise the arduino core will not behave as you would expect. The sdkconfig in the arduino-esp32 usually lives here:
 	>     arduino-esp32/tools/sdk/sdkconfig
 	copy this file to your project's root directory. You can make further changes as needed for your project on top of this.
-		
-4. move to the project directory and build as usual for any esp-idf project.
+
+4. Move to the project directory and build as usual for any esp-idf project.
 Look at the appropriate steps for [Makefile Build System](#build-flash-makefile) or [CMake Build System](#build-flash-cmake).
 
 

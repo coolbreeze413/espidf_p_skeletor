@@ -211,8 +211,8 @@ Copy this file to your project's root directory. You can make further changes as
 - Create a separate directory in the project root named "fs_u" . This is the "upstream" SPIFFS root, i.e. we can use this to read the existing SPIFFS image from ESP32 and expand it inside this. This is kept separate from "fs" directory so that we don't inadvertently overwrite our "downstream" directory.
 
 - Read the SPIFFS image from ESP32 into our desktop's filesystem:
-	>     py -2 esptool.py --chip esp32 --port [port] --baud [baud] read_flash -z [spiffs_partition_addr] [spiffs_partition_size] [spiffs_u_img_path]
-	>     py -2 esptool.py --chip esp32 --port COM4 --baud 921600 read_flash -z 0x240000 0x1C0000 skeletor_spiffs_u.img
+	>     py -2 esptool.py --chip esp32 --port [port] --baud [baud] read_flash [spiffs_partition_addr] [spiffs_partition_size] [spiffs_u_img_path]
+	>     py -2 esptool.py --chip esp32 --port COM4 --baud 921600 read_flash 0x240000 0x1C0000 skeletor_spiffs_u.img
 	*NOTE*: The partition address and size should match that in the partition table csv. Also, name this image with a \_u so that we dont overwrite our "downstream" image by mistake.
 	
 - Decode the SPIFFS image.
